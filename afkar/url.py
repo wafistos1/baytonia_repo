@@ -30,15 +30,11 @@ urls = [
 
 
 def get_data(url):
-    
-
     count = 1
     liens = []
     url = url + '?page=1'
     while True:
-        
         print('Url:', url)
-        
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
         cookies = {'session': '134-8225175-0355220'}
         r = requests.get(url, headers=headers, cookies=cookies)
@@ -54,8 +50,6 @@ def get_data(url):
         count += 1
         url = url.split('?')[0] + f'?page={count}'
     print('Len products', len(liens))
-    
-    
     return soup, liens
 
 
@@ -78,11 +72,7 @@ def getnextpage(soup):
     return url2 
 
 
-list_urls = []
-
-
 def scrap_url_product(url1):
-    
     cat1 = url1['cat1']
     cat2 = url1['cat2']
     cat3 = url1['cat3']
@@ -101,12 +91,11 @@ def scrap_url_product(url1):
             'cat2': cat2,
             'cat3': cat3,
             })
-
         print( f'Scrape done .')
         return data
 
-df = pd.read_excel('afkar_url_model.xlsx')
 
+df = pd.read_excel('afkar_url_model.xlsx')
 for i, url in enumerate(urls):
     print('Count: ', i)
     data = scrap_url_product(url)
