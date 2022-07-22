@@ -1,0 +1,10 @@
+*.xlsx
+*.xlsx#
+Ashley/geckodriver.log
+djangoSripte/
+zagzoog/geckodriver.log
+*/geckodriver.log
+sagabrook/scraper.log
+*.log
+lg/__init__.py
+lg/__pycache__/
