@@ -74,6 +74,11 @@ df['product_online'] = df['is_in_stock']
   
   
   
+  
+  
+  
+  
+  
 
 
 
