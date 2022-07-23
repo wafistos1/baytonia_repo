@@ -69,6 +69,10 @@ df.loc[df['qty']=='0', 'is_in_stock'] = 0
 df.loc[df['is_in_stock'] != 0, 'is_in_stock'] = 1
 df['product_online'] = df['is_in_stock']
 
+
+
+
+
 df.loc[df['is_in_stock'] == 0,  'out_of_stock_qty'] = 0
 df.loc[df['is_in_stock'] == 0,  'allow_backorders'] = 0
 df.loc[df['is_in_stock'] == 0,  'product_online'] = 2
