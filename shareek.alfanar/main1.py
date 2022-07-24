@@ -58,7 +58,6 @@ for i, url in enumerate(list_urls):
     
     
     for value1 in list_select_value1:
-        print('Power: ', value1)
         toto1 = driver.find_element_by_xpath(f'//select[@id="variant-wattage"]//option[@value="{value1}"]')
         toto1.click()
         time.sleep(3)
@@ -81,7 +80,6 @@ for i, url in enumerate(list_urls):
             power =  extract_data('الجهد', soup)
             service_life=  extract_data('العمر التشغيلي', soup)
             free_colors1 =  extract_data('اللون', soup)
-            print('Color: ', value2)
             toto1 = driver.find_element_by_xpath(f'//select[@id="variant-color"]//option[@value="{value2}"]')
             power = soup.find('select', {'id': 'variant-wattage'}).find_all('option', {'selected': 'selected'})[1].text.strip()
             tech_info = soup.find_all('ul', {'class': 'product-specification__list'})[1].text.strip()
@@ -125,7 +123,7 @@ for i, url in enumerate(list_urls):
                     
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
-            df.to_excel('Shareek_منتجات الإنارة-test3.xlsx')
+            df.to_excel('Shareek_منتجات الإنارة-شمعة.xlsx')
             
 
 
