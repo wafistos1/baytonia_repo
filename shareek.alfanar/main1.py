@@ -120,10 +120,11 @@ for i, url in enumerate(list_urls):
                 'cat2': cat2,
                 'cat3': cat3
             }
+            
                     
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
-            df.to_excel('Shareek_منتجات الإنارة-شمعة.xlsx')
+            df.to_excel('Shareek_منتجات الإنارة-سبوت لايت.xlsx')
             
 
 
