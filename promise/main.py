@@ -42,7 +42,7 @@ def scrap_products(urls, driver):
     text = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
     soup = BeautifulSoup(text, "html.parser")
     
-    name = soup.find('h2', {'class':'product-details__title brand-title'}).text.strip()
+    name = soup.find('h1', {'class':'product-details__title brand-title'}).text.strip()
     try:
         price = soup.find('span', {'price-before'}).text.replace('ر.س', '').strip()
         special_price = soup.find('span', {'price-after'}).text.replace('ر.س', '').strip()
