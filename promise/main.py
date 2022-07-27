@@ -35,13 +35,17 @@ def scrap_products(urls, driver):
     cat2 = urls['categories2']
     cat3 = urls['categories3']
     driver.get(url)
+    time.sleep(2)
     try:
         driver.find_element_by_class_name('pd-expand-wrapper').click()
     except:
         pass
     text = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
     soup = BeautifulSoup(text, "html.parser")
-    
+    try:
+        sku = soup.find('span', text=re.compile('رقم الموديل')).next_element.next_element.next_element.next_element.text.strip()
+    except:
+        sku = ''
     name = soup.find('h1', {'class':'product-details__title brand-title'}).text.strip()
     try:
         price = soup.find('span', {'price-before'}).text.replace('ر.س', '').strip()
@@ -74,6 +78,7 @@ def scrap_products(urls, driver):
     except:
         product_size = ''
     data = {
+        'sku': sku,
         'link_url': url,
         'name': name,
         'price': price,

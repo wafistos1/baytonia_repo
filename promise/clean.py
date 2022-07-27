@@ -12,7 +12,7 @@ from datetime import datetime
 from datetime import timedelta
 from bs4 import BeautifulSoup
 
-df = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/promise/Promise_product_test.xlsx')
+df = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/promise/Promise_product_update-05-04.xlsx')
 toto = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/promise/categories/Promise_cats.xlsx')
 
 df['categories'] = ''
@@ -40,9 +40,9 @@ df['store_view_code'] = ''
 #df.drop_duplicates(subset=['sku'], inplace=True)
 df['supplier'] = ''
 # df['sku'] = '-' + df['sku']
-# df['sku number only'] = df['sku'].str.replace('-', '')
-df['sku'] = ''
-df['sku number only'] = ''
+df['sku number only'] = df['sku'].str.replace('-', '')
+# df['sku'] = ''
+# df['sku number only'] = ''
 #df['manufacturer'] = 'مستوردة'
 df['product_websites'] = 'base'
 df['is_in_stock']=1

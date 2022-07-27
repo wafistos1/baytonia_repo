@@ -106,14 +106,14 @@ def return_details(value, list_dic):
             if value in i:
                 val = i.replace(value, '')
         return val
-count = 0
-name_excel = 'midas_update_19-07-22-3-4.xlsx'
+midas_update_26-07-22-1.xlsxcount = 0
+name_excel = ''
 
 driver = open_driver()
 
 df = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Scraping_Midas/Categories/midas1_model.xlsx')
 #ForLoop main
-for i, product in enumerate(list_to_products[1686: ]):
+for i, product in enumerate(list_to_products[: 1000]):
 #for i, product in enumerate(list_to_products):
     time.sleep(1)
 

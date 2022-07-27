@@ -47,7 +47,6 @@ def scrap_product(driver, prozes=None, size=None):
         except:
             price = prices[0].text.strip()
             special_price = ''
-        
     except: 
         price =''
         special_price = ''
@@ -64,16 +63,40 @@ def scrap_product(driver, prozes=None, size=None):
     list_images = [img.find('img')['src'].replace('-300x300', '') for img in images]
     base_image = list_images[0]
     add_images = ','.join(list_images[1:])
+    
+    if size and prozes:
+        product_type = 'Not Visible Individually'
+    else:
+        product_type = 'Catalog, Search'
+    configurable_variations = ''
+    if size and prozes:
+        additional_attributes = f'painting_available_sizes={size},frame_colors = {prozes}'
+    else:
+        additional_attributes = ''
+    
+    attribute_set_code = 'sizescolors'
+    if size != None:
+        visibility = 'Catalog, Search'  
+    else:
+        visibility = 'configurable'
+    meta_description = description
+    
     data = {
         'sku': sku,
         'name': name,
         'price': price,
         'special_price': special_price,
+        'weight': 5,
         'link_url': driver.current_url,
         'qty': qty,
         'prozes': prozes,
         'size': size,
+        'product_type': product_type,
+        'additional_attributes': additional_attributes,
+        'attribute_set_code': attribute_set_code,
+        'visibility': visibility,
         'description': description,
+        'meta_description': meta_description,
         'base_image': base_image,
         'add_images': add_images,
         'cat1': cat1,
