@@ -42,10 +42,10 @@ def scrap_product(driver, prozes=None, size=None):
     try:
         prices = soup.find('div', {'class': 'single_variation_wrap'}).find_all('span', {'class': 'woocommerce-Price-amount amount'})
         try:
-            price = prices[0].text.strip()
-            special_price = prices[1].text.strip()
+            price = prices[0].text.replace('ر.س', '').strip()
+            special_price = prices[1].text.replace('ر.س', '').strip()
         except:
-            price = prices[0].text.strip()
+            price = prices[0].text.replace('ر.س', '').strip()
             special_price = ''
     except: 
         price =''
@@ -63,22 +63,20 @@ def scrap_product(driver, prozes=None, size=None):
     list_images = [img.find('img')['src'].replace('-300x300', '') for img in images]
     base_image = list_images[0]
     add_images = ','.join(list_images[1:])
-    
-    if size and prozes:
-        product_type = 'Not Visible Individually'
-    else:
-        product_type = 'Catalog, Search'
+
     configurable_variations = ''
     if size and prozes:
         additional_attributes = f'painting_available_sizes={size},frame_colors = {prozes}'
+        product_type = 'simple'
+        toto = f'sku={sku}, painting_available_sizes={size},frame_colors = {prozes}'
+        visibility = 'Not visible individually'  
     else:
         additional_attributes = ''
-    
+        product_type = 'configurable'
+        toto = ''
+        visibility = 'Catalog, Search'
+        
     attribute_set_code = 'sizescolors'
-    if size != None:
-        visibility = 'Catalog, Search'  
-    else:
-        visibility = 'configurable'
     meta_description = description
     
     data = {
@@ -91,6 +89,7 @@ def scrap_product(driver, prozes=None, size=None):
         'qty': qty,
         'prozes': prozes,
         'size': size,
+        'toto': toto,
         'product_type': product_type,
         'additional_attributes': additional_attributes,
         'attribute_set_code': attribute_set_code,
@@ -123,6 +122,7 @@ for i, url in enumerate(urls):
     
     #select = Select(driver.find_element_by_id('pa_retsting'))
     count = len(prozes)
+    list_configurable = []
     for t in prozes:
         time.sleep(1)
         t.click()
@@ -139,12 +139,15 @@ for i, url in enumerate(urls):
             size =try_except(select)
             print('Size: ', size)
             data = scrap_product(driver, prozes=proz, size=size)
+            list_configurable.append(data['toto'])
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
             df.to_excel('cancasy_product_update.xlsx')
     driver.get(url)
     time.sleep(2)
     data = scrap_product(driver)
+    data['configurable_variations'] = ','.join(list_configurable)
+    list_configurable = []
     df1 = pd.DataFrame([data])
     df = pd.concat([df, df1], ignore_index=True)
     df.to_excel('cancasy_product_update.xlsx')
