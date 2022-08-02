@@ -34,6 +34,9 @@ print(len(products))
 liens = [toto['href']  for toto in products]
 urls += liens
 
+SIZE_ALLOWED = [
+    '40 × 40 سنتيمتر', '60 × 60 سنتيمتر', '80 × 80 سنتيمتر', '100 × 100 سنتيمتر', '120 × 120 سنتيمتر'
+]
 
 def scrap_product(driver, prozes=None, size=None):
     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
@@ -66,9 +69,9 @@ def scrap_product(driver, prozes=None, size=None):
 
     configurable_variations = ''
     if size and prozes:
-        additional_attributes = f'painting_available_sizes={size},frame_colors = {prozes}'
+        additional_attributes = 'سم' + f'painting_available_sizes={size},{prozes} = frame_colors'.replace('سنتيمتر', '')
         product_type = 'simple'
-        toto = f'sku={sku}, painting_available_sizes={size},frame_colors = {prozes}'
+        toto = 'سم' + f'sku={sku}, painting_available_sizes={size},{prozes} = frame_colors'.replace('سنتيمتر', '')
         visibility = 'Not visible individually'  
     else:
         additional_attributes = ''
@@ -138,6 +141,9 @@ for i, url in enumerate(urls):
             select.select_by_index(i)
             size =try_except(select)
             print('Size: ', size)
+            if size not in SIZE_ALLOWED:
+                print('Pass')
+                continue
             data = scrap_product(driver, prozes=proz, size=size)
             list_configurable.append(data['toto'])
             df1 = pd.DataFrame([data])

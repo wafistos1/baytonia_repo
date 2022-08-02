@@ -106,8 +106,9 @@ def return_details(value, list_dic):
             if value in i:
                 val = i.replace(value, '')
         return val
-midas_update_26-07-22-1.xlsxcount = 0
-name_excel = ''
+
+count = 0
+name_excel = 'midas_update_02-08-22-1.xlsx'
 
 driver = open_driver()
 
@@ -120,13 +121,14 @@ for i, product in enumerate(list_to_products[: 1000]):
     print('*************************************')
     print('Count:', i)
     print('URL:', product['url'])
-    if '/ksa_ar/' in product['url']:
-        print('It is ok')
-    #driver.get('https://midasfurniture.com/ksa_ar/mccade-sectional-sofa.html')
     url = product['url']
     if url == '#':
         print('# Go Next..')
         continue
+    if not '/ksa_ar/' in product['url']:
+        driver.get(str(url))
+        print('It is ok')
+    #driver.get('https://midasfurniture.com/ksa_ar/mccade-sectional-sofa.html')
     
 
     try:
@@ -366,7 +368,10 @@ for i, product in enumerate(list_to_products[: 1000]):
     list_images = extract_url_images(driver)
     list_images = list(dict.fromkeys(list_images))
     
-    base_image =  list_images[0]
+    try:
+        base_image =  list_images[0]
+    except:
+        continue
         
     try:
         additional_images = ",".join(list_images[1:])
