@@ -125,7 +125,7 @@ for i, product in enumerate(list_to_products[: 1000]):
     if url == '#':
         print('# Go Next..')
         continue
-    if not '/ksa_ar/' in product['url']:
+    if not '/ksa_ar/' in diver.curren_url:
         driver.get(str(url))
         print('It is ok')
     #driver.get('https://midasfurniture.com/ksa_ar/mccade-sectional-sofa.html')

@@ -24,19 +24,19 @@ two_month = two_month.strftime("%m/%d/%Y")
 today = datetime.today().strftime("%m/%d/%Y")
 today1 = datetime.today().strftime("%m_%d_%Y")
 
-df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-1.xlsx')
-df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-2.xlsx')
-df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-3.xlsx')
-df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-4.xlsx')
-df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-5.xlsx')
-df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-5-1.xlsx')
-df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-6.xlsx')
-df8 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-7.xlsx')
-df9 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_26-07-22-7-1.xlsx')
+df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-1.xlsx')
+df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-2.xlsx')
+df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-3.xlsx')
+df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-4.xlsx')
+df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-5.xlsx')
+df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-6.xlsx')
+df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-7.xlsx')
 
 
 
-df = pd.concat([df1, df2, df3, df4, df5, df6, df7, df8, df9], ignore_index=True)
+# df = pd.concat([df1, df2, df3, df4, df5, df6, df7], ignore_index=True)
+
+df= pd.read_excel('toto.xlsx')
 df.drop_duplicates(subset=['sku'], inplace=True)
 
 # Clean functions
