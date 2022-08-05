@@ -17,6 +17,12 @@ import requests
 import pandas as pd
 import re
 
+def extract_data(name, soup):
+    try:
+        return soup.find('li', text=re.compile(name)).text.replace(name, '').replace(':', '').replace('(واط)', '').strip()
+    except:
+        return ''
+
 options = Options()
 ua = UserAgent()
 userAgent = ua.random
@@ -40,7 +46,8 @@ for i, url in enumerate(list_urls[8: ]):
     cat1 = cats[1].text.strip()
     cat2 = cats[2].text.strip()
     
-    select = Select(driver.find_element_by_id('variant-mainBreakerType'))
+    #select = Select(driver.find_element_by_id('variant-mainBreakerType'))
+    select = Select(driver.find_element_by_id('variant-mountingType'))
     select1 = Select(driver.find_element_by_id('variant-noOfWays1'))
     select2 = Select(driver.find_element_by_id('variant-mainBreakerRating'))
     select3 = Select(driver.find_element_by_id('variant-ip'))
@@ -51,7 +58,7 @@ for i, url in enumerate(list_urls[8: ]):
     
     for value in list_select_value:
         print('Type: ', value)
-        toto = driver.find_element_by_xpath(f'//select[@id="variant-mainBreakerType"]//option[@value="{value}"]')
+        toto = driver.find_element_by_xpath(f'//select[@id="variant-mountingType"]//option[@value="{value}"]')
         toto.click()
         time.sleep(3)
         for value1 in list_select_value1:
@@ -85,7 +92,15 @@ for i, url in enumerate(list_urls[8: ]):
                         is_in_stock = soup.find('div', text=re.compile('غير متوفره')).text.strip()
                     except:
                         is_in_stock = 1
-                    base_image = 'https://shareek.alfanar.com' + soup.find('div', {'class': 'zoomImg'}).find('img')['src']
+                    try:
+                        base_image = 'https://shareek.alfanar.com' + soup.find('div', {'class': 'zoomImg'}).find('img')['src']
+                    except:
+                        base_image = ''
+                        
+                    brand = extract_data('العلامة التجارية', soup)
+                    tech_info = soup.find_all('ul', {'class': 'product-specification__list'})[1].text.strip()
+                    #
+                    general_info = soup.find_all('ul', {'class': 'product-specification__list'})[0].text.strip()
                     data = {
                         'sku': sku,
                         'name': name,
@@ -95,6 +110,9 @@ for i, url in enumerate(list_urls[8: ]):
                         'description': description,
                         'type_': value,
                         'number_lignes': number,
+                        'brand': brand,
+                        'tech_info': tech_info,
+                        'general_info': general_info,
                         'amper': value2,
                         'security': value3,
                         'base_image': base_image,

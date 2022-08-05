@@ -31,7 +31,7 @@ print(userAgent)
 options.add_argument(f'user-agent={userAgent}')
 #opti#     driver = webdriver.Firefox()ons.add_argument("--headless")
 driver = webdriver.Firefox(firefox_options=options)
-urls = pd.read_excel('shareek_update_urls1.xlsx')
+urls = pd.read_excel('shareek_update_urls.xlsx')
 list_urls = urls['url'].to_list()
 
 df = pd.read_excel('shareek_product_model.xlsx')
@@ -84,6 +84,8 @@ for i, url in enumerate(list_urls):
             power = soup.find('select', {'id': 'variant-wattage'}).find_all('option', {'selected': 'selected'})[1].text.strip()
             tech_info = soup.find_all('ul', {'class': 'product-specification__list'})[1].text.strip()
             products_size = soup.find_all('ul', {'class': 'product-specification__list'})[2].text.strip()
+            #
+            general_info = soup.find_all('ul', {'class': 'product-specification__list'})[0].text.strip()
             toto1.click()
             time.sleep(3)
             price = soup.find('p', {'class': 'price js-product-detail-price'}).text.replace("SR", '').strip()
@@ -101,6 +103,7 @@ for i, url in enumerate(list_urls):
                 'description': description,
                 'free_colors': value2,
                 'power': power,
+                'general_info': general_info,
                 'tech_info': tech_info,
                 'products_size': products_size,
                 'description': description,
@@ -124,7 +127,7 @@ for i, url in enumerate(list_urls):
                     
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
-            df.to_excel('Shareek_منتجات الإنارة-سبوت لايت.xlsx')
+            df.to_excel('Eletra LA لوحة التوزيع الأمريكية.xlsx')
             
 
 
