@@ -47,10 +47,10 @@ for i, url in enumerate(list_urls[8: ]):
     cat2 = cats[2].text.strip()
     
     #select = Select(driver.find_element_by_id('variant-mainBreakerType'))
-    select = Select(driver.find_element_by_id('variant-mountingType'))
-    select1 = Select(driver.find_element_by_id('variant-noOfWays1'))
+    select3 = Select(driver.find_element_by_id('variant-mountingType'))
+    select = Select(driver.find_element_by_id('variant-noOfWays1'))
     select2 = Select(driver.find_element_by_id('variant-mainBreakerRating'))
-    select3 = Select(driver.find_element_by_id('variant-ip'))
+    select1 = Select(driver.find_element_by_id('variant-ip'))
     list_select_value = [ option.get_attribute('value') for option in select.options[1: ]]
     list_select_value1 = [ option.get_attribute('value') for option in select1.options[1: ]]
     list_select_value2 = [ option.get_attribute('value') for option in select2.options[1: ]]
@@ -58,12 +58,12 @@ for i, url in enumerate(list_urls[8: ]):
     
     for value in list_select_value:
         print('Type: ', value)
-        toto = driver.find_element_by_xpath(f'//select[@id="variant-mountingType"]//option[@value="{value}"]')
+        toto = driver.find_element_by_xpath(f'//select[@id="variant-noOfWays1"]//option[@value="{value}"]')
         toto.click()
         time.sleep(3)
         for value1 in list_select_value1:
             print('Number: ', value1)
-            toto1 = driver.find_element_by_xpath(f'//select[@id="variant-noOfWays1"]//option[@value="{value1}"]')
+            toto1 = driver.find_element_by_xpath(f'//select[@id="variant-ip"]//option[@value="{value1}"]')
             toto1.click()
             time.sleep(3)
             for value2 in list_select_value2:
@@ -82,8 +82,8 @@ for i, url in enumerate(list_urls[8: ]):
                     name = soup.find('h4', {'class': 'desc'}).previous_element.strip().replace('', '')
                     description = soup.find('div', {'class': 'product-detail-sec'}).text.strip()
                     print('Securite: ', value3)
-                    toto1 = driver.find_element_by_xpath(f'//select[@id="variant-ip"]//option[@value="{value3}"]')
-                    number = soup.find('select', {'id': 'variant-noOfWays1'}).find_all('option', {'selected': 'selected'})[1].text.strip()
+                    toto1 = driver.find_element_by_xpath(f'//select[@id="variant-mountingType"]//option[@value="{value3}"]')
+                    number = soup.find('select', {'id': 'variant-mountingType'}).find_all('option', {'selected': 'selected'})[1].text.strip()
 
                     toto1.click()
                     time.sleep(3)
