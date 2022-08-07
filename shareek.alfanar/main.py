@@ -35,22 +35,28 @@ list_urls = urls['url'].to_list()
 
 df = pd.read_excel('shareek_product_model.xlsx')
 
-for i, url in enumerate(list_urls[8: ]):
+for i, url in enumerate(list_urls):
     print('Count: ', i)
     print('URL: ', url)
     driver.get(url)
     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    time.sleep(2)
     soup = BeautifulSoup(r, 'html.parser')
     
     cats = soup.find('ol', {'class': 'breadcrumb__list'}).find_all('li')
     cat1 = cats[1].text.strip()
     cat2 = cats[2].text.strip()
     
+    name_1 = 'variant-mainBreakerType'
+    name_2 = 'variant-noOfWays1'
+    name_3 = 'variant-mainBreakerRating'
+    name_4 = 'variant-ip'
+    
     #select = Select(driver.find_element_by_id('variant-mainBreakerType'))
-    select3 = Select(driver.find_element_by_id('variant-mountingType'))
-    select = Select(driver.find_element_by_id('variant-noOfWays1'))
-    select2 = Select(driver.find_element_by_id('variant-mainBreakerRating'))
-    select1 = Select(driver.find_element_by_id('variant-ip'))
+    select = Select(driver.find_element_by_id(name_1))
+    select1 = Select(driver.find_element_by_id(name_2))
+    select2 = Select(driver.find_element_by_id(name_3))
+    select3 = Select(driver.find_element_by_id(name_4))
     list_select_value = [ option.get_attribute('value') for option in select.options[1: ]]
     list_select_value1 = [ option.get_attribute('value') for option in select1.options[1: ]]
     list_select_value2 = [ option.get_attribute('value') for option in select2.options[1: ]]
@@ -58,17 +64,17 @@ for i, url in enumerate(list_urls[8: ]):
     
     for value in list_select_value:
         print('Type: ', value)
-        toto = driver.find_element_by_xpath(f'//select[@id="variant-noOfWays1"]//option[@value="{value}"]')
+        toto = driver.find_element_by_xpath(f'//select[@id="{name_1}"]//option[@value="{value}"]')
         toto.click()
         time.sleep(3)
         for value1 in list_select_value1:
             print('Number: ', value1)
-            toto1 = driver.find_element_by_xpath(f'//select[@id="variant-ip"]//option[@value="{value1}"]')
+            toto1 = driver.find_element_by_xpath(f'//select[@id="{name_2}"]//option[@value="{value1}"]')
             toto1.click()
             time.sleep(3)
             for value2 in list_select_value2:
                 print('Power: ', value2)
-                toto1 = driver.find_element_by_xpath(f'//select[@id="variant-mainBreakerRating"]//option[@value="{value2}"]')
+                toto1 = driver.find_element_by_xpath(f'//select[@id="{name_3}"]//option[@value="{value2}"]')
                 toto1.click()
                 time.sleep(3)
                 for value3 in list_select_value3:
@@ -82,8 +88,8 @@ for i, url in enumerate(list_urls[8: ]):
                     name = soup.find('h4', {'class': 'desc'}).previous_element.strip().replace('', '')
                     description = soup.find('div', {'class': 'product-detail-sec'}).text.strip()
                     print('Securite: ', value3)
-                    toto1 = driver.find_element_by_xpath(f'//select[@id="variant-mountingType"]//option[@value="{value3}"]')
-                    number = soup.find('select', {'id': 'variant-mountingType'}).find_all('option', {'selected': 'selected'})[1].text.strip()
+                    toto1 = driver.find_element_by_xpath(f'//select[@id="{name_4}"]//option[@value="{value3}"]')
+                    number = soup.find('select', {'id': f'{name_4}'}).find_all('option', {'selected': 'selected'})[1].text.strip()
 
                     toto1.click()
                     time.sleep(3)

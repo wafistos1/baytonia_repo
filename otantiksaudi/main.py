@@ -105,4 +105,4 @@ for i, url1 in enumerate(list_urls):
     }
     df1 = pd.DataFrame([data])
     df = pd.concat([df, df1], ignore_index=True)
-    df.to_excel('otantiksaudi_update_products_ar.xlsx')
+    df.to_excel('otantiksaudi_update_products_ar1.xlsx')

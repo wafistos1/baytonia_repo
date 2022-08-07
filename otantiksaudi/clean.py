@@ -14,7 +14,7 @@ from datetime import datetime
 from datetime import timedelta
 from bs4 import BeautifulSoup
 
-df = pd.read_excel('otantiksaudi_update_products_ar.xlsx')
+df = pd.read_excel('otantiksaudi_update_products_ar1.xlsx')
 df['categories'] = ''
 # list_cats = []
 # for index, row in toto.iterrows():
@@ -146,5 +146,5 @@ df = df[['sku number only', 'sku', 'store_view_code', 'attribute_set_code', 'pro
     , 'is_in_stock',  'supplier'
         ]]
 
-df.to_excel(f'darik-update_productall1.xlsx')
+df.to_excel(f'darik-update_product_categories.xlsx')
 
