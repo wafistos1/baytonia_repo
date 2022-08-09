@@ -35,7 +35,7 @@ list_urls = urls['url'].to_list()
 
 df = pd.read_excel('shareek_product_model.xlsx')
 
-for i, url in enumerate(list_urls):
+for i, url in enumerate(list_urls[11: ]):
     print('Count: ', i)
     print('URL: ', url)
     driver.get(url)
@@ -130,7 +130,7 @@ for i, url in enumerate(list_urls):
                     
                     df1 = pd.DataFrame([data])
                     df = pd.concat([df, df1], ignore_index=True)
-                    df.to_excel('Shareek_لوحة توزيع الفنار-test1.xlsx')
+                    df.to_excel('Shareek_لوحة توزيع الفنار-test2.xlsx')
                     
 
 

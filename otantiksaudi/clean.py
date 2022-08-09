@@ -46,10 +46,10 @@ df['store_view_code'] = ''
 #df.drop_duplicates(subset=['sku'], inplace=True)
 df['supplier'] = ''
 # df['sku'] = '-' + df['sku']
-df['sku'] = ''
+
 df['sku number only'] = df['sku'].str.replace('-', '')
 # df['sku number only'] = ''
-df['sku'] = '-' + df['sku']
+# df['sku'] = '-' + df['sku']
 df['manufacturer'] = 'مستوردة'
 df['product_websites'] = 'base'
 df['is_in_stock']=1

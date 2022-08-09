@@ -108,7 +108,7 @@ def return_details(value, list_dic):
         return val
 
 count = 0
-name_excel = 'midas_update_02-08-22-1.xlsx'
+name_excel = 'midas_update_08-08-22-1.xlsx'
 
 driver = open_driver()
 
@@ -125,7 +125,7 @@ for i, product in enumerate(list_to_products[: 1000]):
     if url == '#':
         print('# Go Next..')
         continue
-    if not '/ksa_ar/' in diver.curren_url:
+    if not '/ksa_ar/' in driver.current_url:
         driver.get(str(url))
         print('It is ok')
     #driver.get('https://midasfurniture.com/ksa_ar/mccade-sectional-sofa.html')
