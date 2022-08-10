@@ -21,15 +21,15 @@ from collections import Counter
 
 two_month = datetime.now() + timedelta(days=60)
 two_month = two_month.strftime("%m/%d/%Y")
-today = datetime.today().strftime("%m/%d/%Y")
-today1 = datetime.today().strftime("%m_%d_%Y")
+today = datetime.today().strftime("%d/%m/%Y")
+today1 = datetime.today().strftime("%d_%m_%Y")
 
-df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-1.xlsx')
-df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-2.xlsx')
-df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-3.xlsx')
-df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-4.xlsx')
-df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-5.xlsx')
-df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-6.xlsx')
+df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-1.xlsx')
+df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-2.xlsx')
+df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-3.xlsx')
+df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-4.xlsx')
+df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-5.xlsx')
+df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-6.xlsx')
 df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-7.xlsx')
 
 
