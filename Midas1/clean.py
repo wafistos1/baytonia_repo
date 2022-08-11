@@ -36,7 +36,7 @@ df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas
 
 # df = pd.concat([df1, df2, df3, df4, df5, df6, df7], ignore_index=True)
 
-df= pd.read_excel('toto.xlsx')
+df = pd.read_excel('toto.xlsx')
 df.drop_duplicates(subset=['sku'], inplace=True)
 
 # Clean functions
@@ -132,6 +132,9 @@ df['price'] = pd.to_numeric(df['price'])
 df['cost'] = df['price'] * 0.7
 df['price1'] = df['price'] * 1.15
 
+df['categories1'] = df['category1']
+df['categories2'] = df['category2']
+df['categories3'] = df['category3']
 # Add Categories Columns
 cats = pd.read_excel("/home/wafistos/Documents/Projects/scaping_wafi/Scraping_Midas/Categories/Midas category(1).xlsx")
 list_cats = []
@@ -224,4 +227,4 @@ df = df[['sku number only', 'sku', 'store_view_code', 'attribute_set_code',
     , 'is_in_stock', 'style', 'supplier'
         ]]
 
-df.to_excel(f'Midas_update_{today1}.xlsx')
+df.to_excel(f'Midas_update1_{today1}.xlsx')

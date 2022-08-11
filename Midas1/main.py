@@ -121,6 +121,7 @@ for i, product in enumerate(list_to_products[: 1000]):
     print('*************************************')
     print('Count:', i)
     print('URL:', product['url'])
+    print('Cat: ', product['cat1'] )
     url = product['url']
     if url == '#':
         print('# Go Next..')
@@ -175,18 +176,13 @@ for i, product in enumerate(list_to_products[: 1000]):
     
  # CATEGORY  *******************************************   
  
-    try:
-        category1 = product['cat1'] #driver.find_element_by_class_name('category47').text
-    except:
-        category1 = ''
-    try:
-        category2 =  product['cat2']#driver.find_element_by_class_name('category52').text
-    except:
-        category2 = ''
-    try:
-        category3 = product['cat3']#driver.find_element_by_class_name('').text
-    except:
-        category3 = ''
+
+    category1 = product['cat1'] #driver.find_element_by_class_name('category47').text
+
+    category2 =  product['cat2']#driver.find_element_by_class_name('category52').text
+
+    category3 = product['cat3']#driver.find_element_by_class_name('').text
+
 
 
  # MATTER  *******************************************   
@@ -407,9 +403,9 @@ for i, product in enumerate(list_to_products[: 1000]):
         'swatch_image': swatch_image,
         'thumbnail_image': thumbnail_image,
         'additional_images': additional_images,
-        'category1': category1,
-        'category2': category2,
-        'category3': category3,
+        'categories1': category1,
+        'categories2': category2,
+        'categories3': category3,
         'price': price,
         'special_price': special_price,
         'visibility': 'Catalog, Search',
