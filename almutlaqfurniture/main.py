@@ -8,16 +8,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
-import time
-import re
+import time, logging, re
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 options = Options()
 ua = UserAgent()
 userAgent = ua.random
-print(userAgent)
+logging.info(userAgent)
 options.add_argument(f'user-agent={userAgent}')
 #opti#     driver = webdriver.Firefox()ons.add_argument("--headless")
 driver = webdriver.Firefox(firefox_options=options)
@@ -45,7 +45,6 @@ def extract_product_size():
 
 
 def extract_ele(list_name):
-    
     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
     for name in list_name:
@@ -78,7 +77,8 @@ def extract_data(driver, url1):
     cat3 = url1['categories3']
     driver.get(url)
     time.sleep(5)
-    r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    body=WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
+    r = body.get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
     sku = soup.find('strong', text=re.compile(r'رقم المنتج')).next_sibling   
     name = soup.find('h1', {'class': 'productFullDetail-productName-BbW'}).text.strip()
@@ -90,7 +90,7 @@ def extract_data(driver, url1):
     guarantee = soup.find('strong', {'class': 'productFullDetail-three_col_text_img-28a'}, text='ضمان').next_element.next_element.text.strip()
     base_image = list_images[0]
     aditionnel_images = ','.join(list_images[1:])
-    print('extract data')
+    logging.info('extract data')
     manufacturer =  extract_ele(['صنع في'])
     
     ts_dimensions_width = extract_ele(['العرض بالسم', 'Width'])
@@ -147,11 +147,12 @@ for index, row in urls.iterrows():
 df = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/almutlaqfurniture/Almutlaq_product_model.xlsx')
 
 for i, url in enumerate(list_urls):
-    print('Count: ', i)
-    print('URL:', url['url'])
+    logging.info(f'Count: {i}')
+    logging.info(f"URL: {url['url']}")
     try:
         data = extract_data(driver, url)
     except:
+        logging.warning(f' Error in {url["url"]}')
         continue
     df1 = pd.DataFrame([data])
     df = pd.concat([df, df1], ignore_index=True)

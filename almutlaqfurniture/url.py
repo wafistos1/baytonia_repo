@@ -8,30 +8,31 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
-import time
-import re
+import time, re, logging
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
+
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 options = Options()
 ua = UserAgent()
 userAgent = ua.random
-print(userAgent)
+logging.info(userAgent)
 options.add_argument(f'user-agent={userAgent}')
 #opti#     driver = webdriver.Firefox()ons.add_argument("--headless")
 driver = webdriver.Firefox(firefox_options=options)
 
 
 def get_data(url):
-    print('Url:', url)
+    logging.info(f'Url: {url}')
     driver.get(url)
-    r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    body=WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,'.category-category_page_container-24J')))
+    r = body.get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
-    time.sleep(8)
     products = soup.find_all('a', {'class': 'item-images-1xN'})
     
     liens = ['https://www.almutlaqfurniture.com' + toto['href']  for toto in products]
-    print('Len products', len(liens))
+    logging.info(f'Len products {len(liens)}')
     list_liens = []
     for t in liens:
         list_liens.append(t)
@@ -50,7 +51,7 @@ def getnextpage():
         return str(driver.current_url)
     except:
         pass
-        # print('', url2)
+        # logging.info('', url2)
 
     
 
@@ -73,7 +74,7 @@ def scrap_url_product(url):
         time.sleep(1)
         for toto in urls_list:
 
-            # print(f'URL:', toto)
+            # logging.info(f'URL:', toto)
             data.append({
             'url':toto, 'categories1':cat1, 'categories2': cat2,'categories2': cat3
             })
@@ -81,10 +82,10 @@ def scrap_url_product(url):
         
         url1 = getnextpage()
         if url1 == '' or url1 == None:
-            print('Next page..')
+            logging.info('Next page..')
             break
-    # print(data)
-    print( f'Scrape done .')
+    # logging.info(data)
+    logging.info( f'Scrape done .')
     return data
 
 urls = [
@@ -144,7 +145,12 @@ urls = [
 
 df = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/almutlaqfurniture/Almutlaq_url_model.xlsx')
 for i, url in enumerate(urls):
-    data = scrap_url_product(url)
+    logging.info(f'Count: {i}')
+    try:
+        data = scrap_url_product(url)
+    except:
+        logging.warning(f'Next in {url["url"]}')
+        continue
     df1 = pd.DataFrame(data)
     df = pd.concat([df, df1], ignore_index=True)
     df.to_excel('Almut_update_url.xlsx')
