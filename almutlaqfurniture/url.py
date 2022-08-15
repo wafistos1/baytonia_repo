@@ -40,7 +40,7 @@ def get_data(url):
 
 
 def getnextpage():
-    # if next url exist 
+    # if next url exist
     try:
         next_p = driver.find_element_by_xpath('//button[@aria-label="move to the next page"]')
     

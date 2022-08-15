@@ -1,25 +1,27 @@
 
 
+import time
+import logging
+import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
-import time
-import os
 from fake_useragent import UserAgent
-from random import randint
-import pandas as pd
-import numpy as np
-import requests
-import pandas as pd
-import re, logging
+# from random import randint
+# import numpy as np
+# import requests
+
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 options = Options()
+
+
+
 ua = UserAgent()
 userAgent = ua.random
 logging.info(userAgent)
@@ -28,16 +30,18 @@ options.add_argument(f'user-agent={userAgent}')
 driver = webdriver.Firefox(firefox_options=options)
 
 def get_data(url):
-    logging.info(f'URL: {url}')
+    '''
+    '''
+    logging.info('URL: %s', (url,))
     driver.get(url)
     while True:
         time.sleep(4)
         try:
             driver.find_element_by_xpath('//a[@class="btn btn--padded btn--primary btn--oval pagination__next mt-10"]').click()
-            
         except:
             logging.info('Next page..')
             break
+
     body=WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
     r = body.get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
@@ -66,6 +70,8 @@ list_urls = [
 ]
 
 def scrap_url_product(url1):
+    '''
+    '''
     cat1 = url1['cat1']
     cat2 = url1['cat2']
     cat3 = url1['cat3']

@@ -56,6 +56,7 @@ def scrap_product(driver, prozes=None, size=None):
     description = soup.find('div', {'class': 'woocommerce-product-details__short-description'}).text.strip()
     cat1 = soup.find('a', {'class': 'breadcrumb-link breadcrumb-link-last'}).text.strip()
     sku = soup.find('span', {'class', 'sku'}).text.strip()
+    new_sku = ''
     try:
         qty = soup.find('p', {'class': 'stock in-stock'}).text.replace('متوفر في المخزون', '').strip()
     except:
@@ -69,9 +70,14 @@ def scrap_product(driver, prozes=None, size=None):
 
     configurable_variations = ''
     if size and prozes:
-        additional_attributes = 'سم' + f'painting_available_sizes={size},{prozes} = frame_colors'.replace('سنتيمتر', '')
+        clean_prozes = prozes.replace('سنتيمتر', '').strip()
+        clean_size = size.replace('×', '*').replace('سنتيمتر', '').strip()
+        clean_size_sku = size.replace('*', '-').replace('×', '-')
+        new_sku = str(sku + '-' + clean_size_sku + '-' + clean_prozes).replace('سنتيمتر', '')
+        # additional_attributes = 'سم' + f'painting_available_sizes={clean_size},{clean_prozes} = frame_colors'.replace('سنتيمتر', '')
+        additional_attributes =  f'frame_colors = {clean_prozes} painting_available_sizes = {clean_size}'.replace('سنتيمتر', '') + 'سم' 
         product_type = 'simple'
-        toto = 'سم' + f'sku={sku}, painting_available_sizes={size},{prozes} = frame_colors'.replace('سنتيمتر', '')
+        toto = 'سم' + f'sku={new_sku}, painting_available_sizes={clean_size},{clean_prozes} = frame_colors'.replace('سنتيمتر', '')
         visibility = 'Not visible individually'  
     else:
         additional_attributes = ''
@@ -84,6 +90,7 @@ def scrap_product(driver, prozes=None, size=None):
     
     data = {
         'sku': sku,
+        'NEW SKU': new_sku,
         'name': name,
         'price': price,
         'special_price': special_price,
@@ -157,3 +164,4 @@ for i, url in enumerate(urls):
     df1 = pd.DataFrame([data])
     df = pd.concat([df, df1], ignore_index=True)
     df.to_excel('cancasy_product_update.xlsx')
+    print('Scraping Done')

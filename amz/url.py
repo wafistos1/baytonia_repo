@@ -8,13 +8,6 @@ import pandas as pd
 
 
 def get_data(url):
-    
-    # Fonction to scrape all urls from itch categories
-    # Return Data
-    
-#     s = HTMLSession()
-#     r = s.get(url)
-#     r.html.render(timeout= 30, sleep=1)
     print('Url:', url)
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
     cookies = {'session': '134-8225175-0355220'}
@@ -92,7 +85,7 @@ def scrap_url_product(url1):
     return data
 
 urls_list = [
-    {'url': 'https://www.amazon.sa/s?k=Beauty+land+gardens&ref=bl_dp_s_web_0','cat1': '', 'cat2': '', 'cat3': ''},
+    {'url': 'https://www.amazon.sa/s?k=%D8%A8%D9%8A%D9%88%D8%AA%D9%8A+%D9%84%D8%A7%D9%86%D8%AF+%D8%AC%D8%A7%D8%B1%D8%AF%D9%86%D8%B2&ref=bl_dp_s_web_0','cat1': '', 'cat2': '', 'cat3': ''},
 ]
 df = pd.read_excel('amz_url_model.xlsx')
 

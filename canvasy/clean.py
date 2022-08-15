@@ -101,7 +101,7 @@ toto_clean('description')
 df['size1'] = df['size'].str.replace(' ', '-').str.replace('×', '*').str.strip()
 df['brozes1'] = df['prozes'].str.replace(' ', '-').str.strip()
 
-df['base_image'] = df['base_images']
+# df['base_image'] = df['base_images']
 
 df['small_image'] =  df['base_image']
 df['swatch_image'] =  df['base_image']
@@ -127,7 +127,7 @@ list_columns = [
 for column in list_columns:
     df.loc[(df[column] == '') | (df[column].isnull()), column] = '__EMPTY__VALUE__'
 
-df = df[['sku', 'weight', 'configurable_variations', 'attribute_set_code','product_type',  
+df = df[['NEW SKU', 'sku', 'weight', 'configurable_variations', 'attribute_set_code','product_type',  
          'visibility', 'cost', 'price', 'special_price',  'additional_attributes', 'categories',
          'product_websites', 'name', 'meta_title', 'meta_description', 'description', 'short_description',
          'url_key', 'product_online', 'qty', 'is_in_stock', 'allow_bakcorder', 'out_of_stock_qty',  
@@ -140,5 +140,5 @@ df = df[['sku', 'weight', 'configurable_variations', 'attribute_set_code','produ
         ]]
 
 
-df.to_excel(f'canvasy-update_product_clean_data1.xlsx')
+df.to_excel(f'canvasy-update_product_clean_data2.xlsx')
 
