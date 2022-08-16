@@ -24,15 +24,22 @@ print(userAgent)
 options.add_argument(f'user-agent={userAgent}')
 #opti#     driver = webdriver.Firefox()ons.add_argument("--headless")
 driver = webdriver.Firefox(firefox_options=options)
-driver.get('https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/9/')
 urls = []
-r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
-soup = BeautifulSoup(r, "html.parser")
-time.sleep(1)
-products = soup.find_all('a', {'class': 'product-image-link'})
-print(len(products))
-liens = [toto['href']  for toto in products]
-urls += liens
+urls_list = [
+    "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/1?per_page=36",
+    "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/2?per_page=36",
+    "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/3?per_page=36",
+    "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/4?per_page=36",
+]
+for ls in urls_list:
+    driver.get(ls)
+    r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    soup = BeautifulSoup(r, "html.parser")
+    time.sleep(1)
+    products = soup.find_all('a', {'class': 'product-image-link'})
+    print(len(products))
+    liens = [toto['href']  for toto in products]
+    urls += liens
 
 SIZE_ALLOWED = [
     '40 × 40 سنتيمتر', '60 × 60 سنتيمتر', '80 × 80 سنتيمتر', '100 × 100 سنتيمتر', '120 × 120 سنتيمتر'
@@ -62,11 +69,16 @@ def scrap_product(driver, prozes=None, size=None):
     except:
         qty = ''
     time.sleep(1)
-    images = soup.find_all('div', {'class': 'product-image-thumbnail'})
-    len(images)
-    list_images = [img.find('img')['src'].replace('-300x300', '') for img in images]
-    base_image = list_images[0]
-    add_images = ','.join(list_images[1:])
+    try:
+        images = soup.find_all('div', {'class': 'product-image-thumbnail'})
+        len(images)
+        list_images = [img.find('img')['src'].replace('-300x300', '') for img in images]
+        base_image = list_images[0]
+        add_images = ','.join(list_images[1:])
+    except IndexError:
+        images = soup.find('figure', {'class': 'woocommerce-product-gallery__image'}).find('a')['href']
+        base_image = images
+        add_images = ''
 
     configurable_variations = ''
     if size and prozes:
@@ -122,7 +134,7 @@ def try_except(name):
             return None
 
         
-for i, url in enumerate(urls):
+for i, url in enumerate(urls[61: ]):
     print('Count: ', i)
     print('URL: ', url)
     driver.get(url)
@@ -155,7 +167,7 @@ for i, url in enumerate(urls):
             list_configurable.append(data['toto'])
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
-            df.to_excel('cancasy_product_update.xlsx')
+            df.to_excel('cancasy_product_update1.xlsx')
     driver.get(url)
     time.sleep(2)
     data = scrap_product(driver)
@@ -163,5 +175,5 @@ for i, url in enumerate(urls):
     list_configurable = []
     df1 = pd.DataFrame([data])
     df = pd.concat([df, df1], ignore_index=True)
-    df.to_excel('cancasy_product_update.xlsx')
+    df.to_excel('cancasy_product_update2.xlsx')
     print('Scraping Done')

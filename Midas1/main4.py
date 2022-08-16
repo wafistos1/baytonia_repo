@@ -15,7 +15,7 @@ import re
 from datetime import datetime
 from datetime import timedelta
 from bs4 import BeautifulSoup
-
+from datetime import date
 import requests
 
 import string
@@ -107,7 +107,8 @@ def return_details(value, list_dic):
                 val = i.replace(value, '')
         return val
 count = 0
-name_excel = 'midas_update_08-08-22-5.xlsx'
+d1 = date.today().strftime("%d-%m-%Y")
+name_excel = f'midas_update_{d1}-5.xlsx'
 
 driver = open_driver()
 

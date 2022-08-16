@@ -1,22 +1,7 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.firefox.options import Options
-import time
-import os
-from fake_useragent import UserAgent
-from random import randint
-import pandas as pd
-import numpy as np
-import re
+import string
 from datetime import datetime
 from datetime import timedelta
-from bs4 import BeautifulSoup
-import requests
-import string
-from collections import Counter
+import pandas as pd
 
 
 two_month = datetime.now() + timedelta(days=60)
@@ -24,19 +9,18 @@ two_month = two_month.strftime("%m/%d/%Y")
 today = datetime.today().strftime("%d/%m/%Y")
 today1 = datetime.today().strftime("%d_%m_%Y")
 
-df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-1.xlsx')
-df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-2.xlsx')
-df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-3.xlsx')
-df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-4.xlsx')
-df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-5.xlsx')
-df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_08-08-22-6.xlsx')
-df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_02-08-22-7.xlsx')
+df1 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-1.xlsx')
+df2 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-2.xlsx')
+df3 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-3.xlsx')
+df4 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-4.xlsx')
+df5 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-5.xlsx')
+df6 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-6.xlsx')
+df7 = pd.read_excel('/home/wafistos/Documents/Projects/scaping_wafi/Midas1/midas_update_15-08-2022-7.xlsx')
 
 
 
-# df = pd.concat([df1, df2, df3, df4, df5, df6, df7], ignore_index=True)
-
-df = pd.read_excel('toto.xlsx')
+df = pd.concat([df1, df2, df3, df4, df5, df6, df7], ignore_index=True)
+df.to_excel('brut.xlsx')
 df.drop_duplicates(subset=['sku'], inplace=True)
 
 # Clean functions
@@ -124,17 +108,17 @@ df.loc[df['sec_color'] == '', 'sec_color'] = '__EMPTY__VALUE__'
 clean_punct('url_key')
 df['description'] = df['description'].str.replace('♦', '', regex=False)
 df['short_description'] = df['description']
-df['ts_dimensions_width'] = df['width'] 
-df['ts_dimensions_height'] = df['height'] 
-df['ts_dimensions_length'] = df['length'] 
+df['ts_dimensions_width'] = df['width']
+df['ts_dimensions_height'] = df['height']
+df['ts_dimensions_length'] = df['length']
 # Clean Prices:
 df['price'] = pd.to_numeric(df['price'])
 df['cost'] = df['price'] * 0.7
 df['price1'] = df['price'] * 1.15
 
-df['categories1'] = df['category1']
-df['categories2'] = df['category2']
-df['categories3'] = df['category3']
+# df['categories1'] = df['category1']
+# df['categories2'] = df['category2']
+# df['categories3'] = df['category3']
 # Add Categories Columns
 cats = pd.read_excel("/home/wafistos/Documents/Projects/scaping_wafi/Scraping_Midas/Categories/Midas category(1).xlsx")
 list_cats = []
@@ -159,7 +143,7 @@ df.loc[~df['estimated_delivery_text'].isnull(), 'is_in_stock'] = 0
 
 # Extract  estimated_delivery_text
 df.loc[df['estimated_delivery_text'].isnull(), 'estimated_delivery_text'] =  'الوقت المقدر لشحن هذا المنتج أسبوعين'
-df.loc[df['estimated_delivery_text'].isnull(), 'estimated_delivery_text']
+
 df['estimated_delivery_enable'] = 'Static Text'
 df.loc[df['is_in_stock'] == 'متوفر', 'is_in_stock'] = 1
 df.loc[df['is_in_stock'] == 'غير متوفر', 'is_in_stock'] = 0
@@ -203,7 +187,6 @@ list_columns = [
     'style',
     'style1',
     'no_of_peices',
-    
 ]
 for column in list_columns:
     df.loc[(df[column] == '') | (df[column].isnull()), column] = '__EMPTY__VALUE__'
@@ -227,4 +210,4 @@ df = df[['sku number only', 'sku', 'store_view_code', 'attribute_set_code',
     , 'is_in_stock', 'style', 'supplier'
         ]]
 
-df.to_excel(f'Midas_update1_{today1}.xlsx')
+df.to_excel(f'Midas_update_all_{today1}.xlsx')

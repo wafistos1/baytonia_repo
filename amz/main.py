@@ -1,22 +1,21 @@
-
+import time
+import logging
+# import os
+import re
+import requests
+import pandas as pd
+# import numpy as np
+# from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.options import Options
-import time
-import os
 from fake_useragent import UserAgent
-from random import randint
-import pandas as pd
-import numpy as np
-import re
-from datetime import datetime
-from datetime import timedelta
+# from random import randint
+# from datetime import datetime
+# from datetime import timedelta
 from bs4 import BeautifulSoup
-import requests
-import logging
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
@@ -37,9 +36,10 @@ def return_ele(name, soup):
 def extract(name, soup):
     try:
         return soup.find('th', text=re.compile(name)).next_element.next_element.next_element.text.strip()
+
     except:
         return ''
-    
+
 def extract_data(url1):
     url = url1['url']
     cat1 = url1['cat1']

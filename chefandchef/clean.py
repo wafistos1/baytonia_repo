@@ -14,11 +14,7 @@ from datetime import datetime
 from datetime import timedelta
 from bs4 import BeautifulSoup
 
-df1 = pd.read_excel('cancasy_product_update.xlsx')
-df2 = pd.read_excel('cancasy_product_update1.xlsx')
-df3 = pd.read_excel('cancasy_product_update2.xlsx')
-
-df = pd.concat([df1, df2, df3], ignore_index=True)
+df = pd.read_excel('')
 df['categories'] = ''
 # list_cats = []
 # for index, row in toto.iterrows():
@@ -26,8 +22,8 @@ df['categories'] = ''
     
 # for cat in list_cats:
 #     df.loc[(df['categories2']== cat['categories2']) & (df['categories3']== cat['categories3']), 'categories'] = cat['id']
-
-df[['ts_dimensions_length', 'ts_dimensions_width']] = df['size'].str.replace('سنتيمتر', '').str.replace('x', '×').str.split('×', 1, expand=True)
+    
+    
 
 two_month = datetime.now() + timedelta(days=60)
 two_month = two_month.strftime("%m/%d/%Y")
@@ -38,29 +34,31 @@ today = datetime.today().strftime("%m/%d/%Y")
 df['news_from_date'] = today
 df['news_to_date'] = two_month
 df['product_websites'] = 'base'
-
+df['attribute_set_code'] = 'Default'
+df['product_type'] = 'simple'
 df['store_view_code'] = ''
 #df.drop_duplicates(subset=['sku'], inplace=True)
 df['supplier'] = ''
-df['sku'] = 'can-' + df['sku']
+# df['sku'] = '-' + df['sku']
 df['sku number only'] = df['sku'].str.replace('-', '')
 # df['sku number only'] = ''
-
-df['NEW SKU'] = 'can-' + df['NEW SKU']
+df['sku'] = '-' + df['sku']
 df['manufacturer'] = 'مستوردة'
 df['product_websites'] = 'base'
-df['is_in_stock'] = 1
-df['allow_backorders'] = 1
+df['is_in_stock']=1
+df['allow_backorders'] = df['is_in_stock']
+df['visibility'] = 'Catalog, Search'
 df['tax_class_name'] = 'Taxable Goods'
-df['allow_bakcorder'] = 1
 
-df['out_of_stock_qty'] = -50
+#df['qty'] = 0
+df.loc[df['qty'].isnull() , 'qty'] = 0
+df['out_of_stock_qty'] = -5
 
 
-df['product_online'] = 1
+df['product_online'] = df['is_in_stock']
 
-# df['price'] = df['price'].str.replace(',', '').str.strip()
-# df['special_price'] = df['special_price'].str.replace(',', '').str.strip()
+df['price'] = df['price'].str.replace('.', '').str.replace(',', '.').str.replace('رس', '').str.replace('ر.س', '').str.strip()
+df['special_price'] = df['special_price'].str.replace('.', '').str.replace('رس', '').str.replace(',', '.').str.replace('ر.س', '').str.replace('ر.س', '').str.strip()
 
 df['special_price'] = pd.to_numeric(df['special_price'])
 df['price'] = pd.to_numeric(df['price'])
@@ -103,28 +101,22 @@ def price_num(name):
     df.loc[df[name] == 0, name] = '__EMPTY__VALUE__'
 toto_clean('name')
 toto_clean('description')
-df['size1'] = df['size'].str.replace(' ', '-').str.replace('×', '*').str.strip()
-df['brozes1'] = df['prozes'].str.replace(' ', '-').str.strip()
 
-# df['base_image'] = df['base_images']
+df['base_image'] = df['base_images']
 
 df['small_image'] =  df['base_image']
 df['swatch_image'] =  df['base_image']
 df['thumbnail_image'] =  df['base_image']
-df['additional_images'] = df['add_images']
+
 
 
 df['estimated_delivery_enable'] = 'Static Text'
 df['estimated_delivery_text'] = ''
-df['url_key'] =  df['name']   + df['size1'] + ',' + df['brozes1']
+df['url_key'] = df['sku'] + '-' + df['name'] 
 # df['additionnel_images'] = ''
 df['categories3'] = ''
-df['categories'] = '55'
-df['meta_title'] = df['name'] + '-' + df['size'] + ',' + df['prozes']
-df['short_description'] = df['description']
-df['raw_materials'] = 'كانفاس'
-df['manage_stock'] = 1
-df['no_of_peices'] = 1
+df['categories'] = ''
+
 df['special_price'] = ''
 list_columns = [
     'special_price',
@@ -132,18 +124,33 @@ list_columns = [
 for column in list_columns:
     df.loc[(df[column] == '') | (df[column].isnull()), column] = '__EMPTY__VALUE__'
 
-df = df[['NEW SKU', 'sku', 'weight', 'configurable_variations', 'attribute_set_code','product_type',  
-         'visibility', 'cost', 'price', 'special_price',  'additional_attributes', 'categories',
-         'product_websites', 'name', 'meta_title', 'meta_description', 'description', 'short_description',
-         'url_key', 'product_online', 'qty', 'is_in_stock', 'allow_bakcorder', 'out_of_stock_qty',  
-          
-         'manufacturer', 'raw_materials',  'no_of_peices', 
-         'ts_dimensions_length', 'ts_dimensions_width', 
-         'base_image', 'small_image', 'swatch_image', 'thumbnail_image', 'additional_images',
-         'manage_stock', 'store_view_code', 'supplier'
+df = df[['sku number only', 'sku', 'store_view_code', 'attribute_set_code', 'product_type',  'product_websites',
+         'name',  'estimated_delivery_enable', 'estimated_delivery_text',  'url_key',  'description'
+, 'link_url', 'categories1', 'categories2', 'categories3', 'categories',
+        'type_',  'free_colors', 'size_products', 'pieces_numbers',
+
          
+    'cost', 'price',  'special_price',  'visibility', 'tax_class_name', 'manufacturer',
+         'news_from_date', 'news_to_date', 'base_image', 'small_image', 'swatch_image' 
+    , 'thumbnail_image', 'additionnel_images', 'product_online', 'qty', 'out_of_stock_qty', 'allow_backorders'
+    , 'is_in_stock',  'supplier'
         ]]
+list_columns = [
+    
+ 'special_price',
+ 'type_',
+ 'free_colors',
+ 'size_products',
+ 'pieces_numbers',
+ 
+    
+    
+
+    
+]
+for column in list_columns:
+    df.loc[(df[column] == '') | (df[column].isnull()), column] = '__EMPTY__VALUE__'
 
 
-df.to_excel(f'canvasy-update_product_clean_data3.xlsx')
+df.to_excel(f'......-update_product.xlsx')
 
