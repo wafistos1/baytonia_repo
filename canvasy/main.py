@@ -24,6 +24,16 @@ print(userAgent)
 options.add_argument(f'user-agent={userAgent}')
 #opti#     driver = webdriver.Firefox()ons.add_argument("--headless")
 driver = webdriver.Firefox(firefox_options=options)
+
+COLORS = {
+    'اسود': 'BLACK',
+    'خشبي': 'WOODEN',
+    'ذهبي': 'GOLDEN',
+    'فضي': 'SILVER',
+    '': ''
+}
+
+
 urls = []
 urls_list = [
     "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/1?per_page=36",
@@ -31,6 +41,7 @@ urls_list = [
     "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/3?per_page=36",
     "https://canvasy.net/product-category/%d9%84%d9%88%d8%ad%d8%a7%d8%aa-%d8%a7%d8%b2%d9%87%d8%a7%d8%b1/page/4?per_page=36",
 ]
+
 for ls in urls_list:
     driver.get(ls)
     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
@@ -45,7 +56,7 @@ SIZE_ALLOWED = [
     '40 × 40 سنتيمتر', '60 × 60 سنتيمتر', '80 × 80 سنتيمتر', '100 × 100 سنتيمتر', '120 × 120 سنتيمتر'
 ]
 
-def scrap_product(driver, prozes=None, size=None):
+def scrap_product(driver, msku, prozes=None, size=None):
     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
     name = soup.find('h1',{'class': 'product_title entry-title wd-entities-title'}).text.strip()
@@ -62,7 +73,7 @@ def scrap_product(driver, prozes=None, size=None):
         special_price = ''
     description = soup.find('div', {'class': 'woocommerce-product-details__short-description'}).text.strip()
     cat1 = soup.find('a', {'class': 'breadcrumb-link breadcrumb-link-last'}).text.strip()
-    sku = soup.find('span', {'class', 'sku'}).text.strip()
+    sku = 'can-' +  soup.find('span', {'class', 'sku'}).text.strip()
     new_sku = ''
     try:
         qty = soup.find('p', {'class': 'stock in-stock'}).text.replace('متوفر في المخزون', '').strip()
@@ -82,12 +93,14 @@ def scrap_product(driver, prozes=None, size=None):
 
     configurable_variations = ''
     if size and prozes:
-        clean_prozes = prozes.replace('سنتيمتر', '').strip()
+        clean_prozes = prozes.replace('بدون', '').replace('برواز', '').strip()
+        print('clean prozes', clean_prozes)
+        colors_prozes = COLORS[clean_prozes]
         clean_size = size.replace('×', '*').replace('سنتيمتر', '').strip()
-        clean_size_sku = size.replace('*', '-').replace('×', '-')
-        new_sku = str(sku + '-' + clean_size_sku + '-' + clean_prozes).replace('سنتيمتر', '')
+        clean_size_sku = size.replace('*', '-').replace('×', '-').replace(' ', '').replace('x', '-').strip()
+        new_sku = str(sku + '-' + clean_size_sku + '-' + colors_prozes).replace('سنتيمتر', '').strip()
         # additional_attributes = 'سم' + f'painting_available_sizes={clean_size},{clean_prozes} = frame_colors'.replace('سنتيمتر', '')
-        additional_attributes =  f'frame_colors = {clean_prozes} painting_available_sizes = {clean_size}'.replace('سنتيمتر', '') + 'سم' 
+        additional_attributes =  f'frame_colors = {clean_prozes} painting_available_sizes = {clean_size}'.replace('سنتيمتر', '').strip() + ' '+ 'سم' 
         product_type = 'simple'
         toto = 'سم' + f'sku={new_sku}, painting_available_sizes={clean_size},{clean_prozes} = frame_colors'.replace('سنتيمتر', '')
         visibility = 'Not visible individually'  
@@ -101,6 +114,7 @@ def scrap_product(driver, prozes=None, size=None):
     meta_description = description
     
     data = {
+        'Mother_sku': msku,
         'sku': sku,
         'NEW SKU': new_sku,
         'name': name,
@@ -140,8 +154,10 @@ for i, url in enumerate(urls[61: ]):
     driver.get(url)
     time.sleep(1)
     prozes = driver.find_elements_by_xpath('//table[@class="variations"]//ul[@class="variable-items-wrapper image-variable-wrapper"]//li')
-    
-    
+    # mother_sku = 
+    r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    soup = BeautifulSoup(r, "html.parser")
+    msku = soup.find('span', {'class', 'sku'}).text.strip()
     #select = Select(driver.find_element_by_id('pa_retsting'))
     count = len(prozes)
     list_configurable = []
@@ -160,17 +176,17 @@ for i, url in enumerate(urls[61: ]):
             select.select_by_index(i)
             size =try_except(select)
             print('Size: ', size)
-            if size not in SIZE_ALLOWED:
-                print('Pass')
-                continue
-            data = scrap_product(driver, prozes=proz, size=size)
+            # if size not in SIZE_ALLOWED:
+            #     print('Pass')
+            #     continue
+            data = scrap_product(driver,msku=msku, prozes=proz, size=size)
             list_configurable.append(data['toto'])
             df1 = pd.DataFrame([data])
             df = pd.concat([df, df1], ignore_index=True)
-            df.to_excel('cancasy_product_update1.xlsx')
+            df.to_excel('cancasy_product_update_all.xlsx')
     driver.get(url)
     time.sleep(2)
-    data = scrap_product(driver)
+    data = scrap_product(driver, msku=msku)
     data['configurable_variations'] = ','.join(list_configurable)
     list_configurable = []
     df1 = pd.DataFrame([data])
