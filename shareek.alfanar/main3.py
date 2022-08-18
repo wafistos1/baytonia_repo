@@ -38,6 +38,13 @@ df = pd.read_excel('shareek_product_model.xlsx')
 
 SKU_LIST = []
 
+def return_value(name, driver):
+    r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
+    time.sleep(2)
+    soup = BeautifulSoup(r, 'html.parser')
+    return soup.find('select', {'id': name}).find_all('option', {'selected': 'selected'})[1].text.strip()
+    
+
 for i, url in enumerate(list_urls[66: ]):
     print('Count: ', i)
     print('URL: ', url)
@@ -66,24 +73,42 @@ for i, url in enumerate(list_urls[66: ]):
     list_select_value3 = [ option.get_attribute('value') for option in select3.options[1: ]]
     # First loop
     for value in list_select_value:
-        print('Type: ', value)
-        toto = driver.find_element_by_xpath(f'//select[@id="{name_1}"]//option[@value="{value}"]')
-        toto.click()
-        time.sleep(3)
-        # Seconde loop
         for value1 in list_select_value1:
-            print('Number: ', value1)
-            toto1 = driver.find_element_by_xpath(f'//select[@id="{name_2}"]//option[@value="{value1}"]')
-            toto1.click()
-            time.sleep(3)
-            # 3 loop
             for value2 in list_select_value2:
-                print('Power: ', value2)
-                toto1 = driver.find_element_by_xpath(f'//select[@id="{name_3}"]//option[@value="{value2}"]')
-                toto1.click()
-                time.sleep(3)
                 # 4 loop 
                 for value3 in list_select_value3:
+                
+                    print('Type: ', value)
+                    toto = driver.find_element_by_xpath(f'//select[@id="{name_1}"]//option[@value="{value}"]')
+                    toto.click()
+                    time.sleep(3)
+                    # Seconde loop
+
+                    print('Number: ', value1)
+                    toto1 = driver.find_element_by_xpath(f'//select[@id="{name_2}"]//option[@value="{value1}"]')
+                    toto1.click()
+                    time.sleep(3)
+                    # 3 loop
+            
+                    print('Power: ', value2)
+                    toto2 = driver.find_element_by_xpath(f'//select[@id="{name_3}"]//option[@value="{value2}"]')
+                    toto2.click()
+                    time.sleep(3)
+                    
+                    print('Power: ', value3)
+                    toto3 = driver.find_element_by_xpath(f'//select[@id="{name_4}"]//option[@value="{value3}"]')
+                    toto3.click()
+                    time.sleep(3)
+                
+                    print('Selcet: 4', return_value(name_4, driver))
+                    print('Selcet: 3', return_value(name_3, driver))
+                    print('Selcet: 2', return_value(name_2, driver))
+                    print('Selcet: 1', return_value(name_1, driver))
+                    real_value1 = return_value(name_1, driver)
+                    real_value2 = return_value(name_2, driver)
+                    real_value3 = return_value(name_3, driver)
+                    real_value4 = return_value(name_4, driver)
+                    
                     duplicate = (value, value1, value2, value3)
                     r = driver.find_element_by_tag_name('body').get_attribute('innerHTML')
                     soup = BeautifulSoup(r, 'html.parser')
@@ -126,13 +151,13 @@ for i, url in enumerate(list_urls[66: ]):
                         'link_url':url,
                         'is_in_stock': is_in_stock,
                         'description': description,
-                        'type_': value,
-                        'number_lignes': number,
+                        'type_': real_value1,
+                        'number_lignes': real_value2,
                         'brand': brand,
                         'tech_info': tech_info,
                         'general_info': general_info,
-                        'amper': value2,
-                        'security': value3,
+                        'amper': real_value3,
+                        'security': real_value4,
                         'base_image': base_image,
                         'add_images': '',
                         'cat1': cat1,

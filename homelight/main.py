@@ -59,6 +59,7 @@ def scrape_data(url1):
     r = body.get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
     name = soup.find('h1', {'class': 'title'}).text.strip()
+    sku = soup.find('div', {'class': 'list--table-view__cell value text-unicode'}).text.strip()
     price = soup.find('div', {'class': 'price-wrapper-info'}).text.replace('ر.س', '').strip()
     description = soup.find('article', {'class':'article'}).text
     images = soup.find_all('a', {'data-fancybox':'product-details'})
@@ -78,6 +79,7 @@ def scrape_data(url1):
     tmp = return_ele('درجة حرارة اللون', soup)
 
     data = {
+        'sku': sku,
         'Link_url': url,
         'name': name,
         'price': price,
