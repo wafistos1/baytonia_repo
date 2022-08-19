@@ -17,9 +17,6 @@ from fake_useragent import UserAgent
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 options = Options()
-
-
-
 ua = UserAgent()
 userAgent = ua.random
 logging.info(userAgent)
