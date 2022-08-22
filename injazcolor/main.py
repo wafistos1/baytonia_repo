@@ -51,26 +51,38 @@ def scrape_data(url1):
     body=WebDriverWait(driver,20).until(EC.visibility_of_element_located((By.TAG_NAME,'body')))
     r = body.get_attribute('innerHTML')
     soup = BeautifulSoup(r, "html.parser")
-    time.sleep(2)
+    time.sleep(1)
     # Data extract
     name = soup.find('h1', {'class': 'product_title'}).text.strip()
+    sku = name.split(' ')[-1]
     price = soup.find('p', {'class': 'price'}).text.split('لكل')[0].replace('SAR', '').strip()
+    price = soup.find('p', {'class': 'price'}).text.split('Per')[0].replace('SAR', '').strip()
     try:
-        price_dimension = soup.find('p', {'class': 'price'}).text.split('لكل')[1].strip()
-    except IndexError:
-        price_dimension = ''
+        if soup.find('p', {'class': 'price'}).text.split('Per')[1].strip():
+            price_dimension = 'M2'
+        else:
+            price_dimension = 'M2'
+    except:
+        price_dimension = '__EMPTY__VALUE__'
     try:
         description = soup.find('div', {'class': 'woocommerce-product-details__short-description'}).text.strip()
     except AttributeError:
         logging.warning('No description find.')
         description = ''
+    images = soup.find('div', {'class': 'owl-stage'}).find_all('img')
+    list_images = [img['src'].split('?')[0] for img in images]
+    base_image = list_images[0]
+    add_images = ','.join(list_images[1: ])
     
     return {
+        'sku': sku,
         'name': name,
         'link_url': url,
-        'price': price,
         'price_dimension': price_dimension,
+        'price': price,
         'description': description,
+        'base_image': base_image,
+        'add_images': add_images,
         'cat1': cat1,
         'cat2': cat2,
         'cat3': cat3,
