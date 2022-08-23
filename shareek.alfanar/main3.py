@@ -45,7 +45,7 @@ def return_value(name, driver):
     return soup.find('select', {'id': name}).find_all('option', {'selected': 'selected'})[1].text.strip()
     
 
-for i, url in enumerate(list_urls[66: ]):
+for i, url in enumerate(list_urls):
     print('Count: ', i)
     print('URL: ', url)
     driver.get(url)
@@ -144,6 +144,10 @@ for i, url in enumerate(list_urls[66: ]):
                     #
                     print('VALUES :', duplicate)
                     general_info = soup.find_all('ul', {'class': 'product-specification__list'})[0].text.strip()
+                    try:
+                        dimensions_packaging = soup.find_all('ul', {'class': 'product-specification__list'})[2].text.strip()
+                    except:
+                        dimensions_packaging = ''
                     data = {
                         'sku': sku,
                         'name': name,
@@ -154,6 +158,7 @@ for i, url in enumerate(list_urls[66: ]):
                         'type_': real_value1,
                         'number_lignes': real_value2,
                         'brand': brand,
+                        'dimensions_packaging': dimensions_packaging,
                         'tech_info': tech_info,
                         'general_info': general_info,
                         'amper': real_value3,
@@ -167,7 +172,7 @@ for i, url in enumerate(list_urls[66: ]):
                     
                     df1 = pd.DataFrame([data])
                     df = pd.concat([df, df1], ignore_index=True)
-                    df.to_excel('test3.xlsx')
+                    df.to_excel('test4.xlsx')
                     
 
 

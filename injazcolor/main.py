@@ -19,6 +19,14 @@ import numpy as np
 #pip install requests pandas openpyxl selenium=3.14 fake_useragent bs4
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
+def return_ele(name, soup):
+    try:
+        try:
+            return soup.find('em', text=re.compile(name)).text.replace(name, '').strip()
+        except: 
+            return soup.find('strong', text=re.compile(name)).text.replace(name, '').strip()
+    except: return ''
+
 options = Options()
 ua = UserAgent()
 userAgent = ua.random
@@ -69,6 +77,9 @@ def scrape_data(url1):
     except AttributeError:
         logging.warning('No description find.')
         description = ''
+    
+    product_size = return_ele('لوح مقاس', soup)
+    product_size1 = return_ele('مقاس اللوح', soup)
     images = soup.find('div', {'class': 'owl-stage'}).find_all('img')
     list_images = [img['src'].split('?')[0] for img in images]
     base_image = list_images[0]
@@ -80,6 +91,8 @@ def scrape_data(url1):
         'link_url': url,
         'price_dimension': price_dimension,
         'price': price,
+        'product_size': product_size,
+        'product_size1': product_size1,
         'description': description,
         'base_image': base_image,
         'add_images': add_images,
